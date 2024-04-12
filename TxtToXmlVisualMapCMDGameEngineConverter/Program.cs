@@ -33,7 +33,7 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
 
             List <VisualElement> visualElements = GetVisualElementsFromTxtLines(lines);
 
-            WriteFileFromCharsDictionary(charsDictionary);
+            WriteFileFromCharsDictionary(visualElements);
 
         }
 
@@ -81,31 +81,22 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
             return visualElements;
         }
 
-        static void WriteFileFromCharsDictionary(Dictionary<int, Dictionary<int, char>> charsDictionary)
+        static void WriteXMLFile(List<VisualElement> visualElements)
         {
             XmlDocument doc = new XmlDocument();
             XmlElement root = doc.CreateElement("objectVisualMap");
             doc.AppendChild(root);
 
-            foreach (var outerPair in charsDictionary)
+
+            foreach (VisualElement visualElement in visualElements)
             {
-                int x = outerPair.Key;
-
                 XmlElement element = doc.CreateElement("element");
-                element.SetAttribute("x", x.ToString());
-
-
-                Dictionary<int, char> innerDictionary = outerPair.Value;
-                foreach (var innerPair in innerDictionary)
-                {
-                    int y = innerPair.Key;
-                    char value = innerPair.Value;
-
-                    element.SetAttribute("y", y.ToString());
-                    element.SetAttribute("sign", value.ToString());
-                    root.AppendChild(element);
-                }
+                element.SetAttribute("x", visualElement.X.ToString());
+                element.SetAttribute("y", visualElement.Y.ToString());
+                element.SetAttribute("sign", visualElement.Sign.ToString());
+                root.AppendChild(element);
             }
+
 
             string filePath = "file.xml";
 
