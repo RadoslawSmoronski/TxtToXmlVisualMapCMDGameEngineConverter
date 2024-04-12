@@ -67,7 +67,7 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
 
                 foreach (char sign in line)
                 {
-                    if (c != ' ')
+                    if (sign != ' ')
                     {
                         visualElements.Add(new VisualElement(x, y, sign));
                     }
@@ -78,7 +78,7 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
                 y++;
             }
 
-            return dictionary;
+            return visualElements;
         }
 
         static void WriteFileFromCharsDictionary(Dictionary<int, Dictionary<int, char>> charsDictionary)
