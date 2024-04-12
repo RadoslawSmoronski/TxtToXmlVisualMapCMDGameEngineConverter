@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Xml;
 
 namespace TxtToXmlVisualMapCMDGameEngineConverter
 {
@@ -17,7 +18,7 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
             finally
             {
@@ -82,7 +83,36 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
 
         static void WriteFileFromCharsDictionary(Dictionary<int, Dictionary<int, char>> charsDictionary)
         {
+            XmlDocument doc = new XmlDocument();
+            XmlElement root = doc.CreateElement("objectVisualMap");
+            doc.AppendChild(root);
 
+            foreach (var outerPair in charsDictionary)
+            {
+                int x = outerPair.Key;
+
+                XmlElement element = doc.CreateElement("element");
+                element.SetAttribute("x", x.ToString());
+
+
+                Dictionary<int, char> innerDictionary = outerPair.Value;
+                foreach (var innerPair in innerDictionary)
+                {
+                    int y = innerPair.Key;
+                    char value = innerPair.Value;
+
+                    element.SetAttribute("y", y.ToString());
+                    element.SetAttribute("sign", value.ToString());
+                    root.AppendChild(element);
+                }
+            }
+
+            string filePath = "file.xml";
+
+            using (XmlWriter writer = XmlWriter.Create(filePath, new XmlWriterSettings { Indent = true }))
+            {
+                doc.Save(writer);
+            }
         }
     }
 }
