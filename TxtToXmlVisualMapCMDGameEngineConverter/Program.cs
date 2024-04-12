@@ -5,24 +5,32 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
 {
     internal class Program
     {
+        static string version = "1.0.0";
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Txt to XML VisualMap converter\nfor CMDGameEngine\n\n");
-            Console.Write("File path to file to convert: ");
-
-            string txtPath = Console.ReadLine();
-
-            try
+            if (args.Length < 1)
             {
-                Convert(txtPath);
+                Console.WriteLine("  Error: No command given.");
+                return;
             }
-            catch (Exception ex)
+
+            switch(args[0])
             {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                Console.WriteLine("\ntxtPath.xml was created succesfully!");
+                case "convert":
+                    Console.WriteLine("test");
+                    break;
+                case "help":
+                    Console.WriteLine(
+                        "\n  Help - Txt To Xml VisualMap CMDGameEngine Converter\n" +
+                        "   convert <filePath> - convertion txt file to VisualMap xml file\n" +
+                        "   version - version of program\n");
+                    break;
+                case "version":
+                    Console.WriteLine(
+                        $"\n  Txt To Xml VisualMap CMDGameEngine Converter" +
+                        $"\n  ver. {version}");
+                    break;
             }
 
         }
@@ -33,7 +41,7 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
 
             List <VisualElement> visualElements = GetVisualElementsFromTxtLines(lines);
 
-            WriteFileFromCharsDictionary(visualElements);
+            WriteXMLFile(visualElements);
 
         }
 
