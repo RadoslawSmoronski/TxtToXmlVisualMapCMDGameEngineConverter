@@ -31,7 +31,7 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
         {
             string [] lines = GetLinesFromTxt(filePath);
 
-            Dictionary<int, Dictionary<int, char>> charsDictionary = GetDictionaryWithChars(lines);
+            List <VisualElement> visualElements = GetVisualElementsFromTxtLines(lines);
 
             WriteFileFromCharsDictionary(charsDictionary);
 
@@ -55,9 +55,9 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
             }
         }
 
-        static Dictionary<int, Dictionary<int, char>> GetDictionaryWithChars(string[] lines)
+        static List<VisualElement> GetVisualElementsFromTxtLines(string[] lines)
         {
-            Dictionary<int, Dictionary<int, char>> dictionary = new Dictionary<int, Dictionary<int, char>>();
+            List <VisualElement> visualElements = new List<VisualElement> ();
 
             int y = 0;
 
@@ -65,11 +65,11 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
             {
                 int x = 0;
 
-                foreach (char c in line)
+                foreach (char sign in line)
                 {
                     if (c != ' ')
                     {
-                        dictionary[x][y] = c;
+                        visualElements.Add(new VisualElement(x, y, sign));
                     }
 
                     x++;
