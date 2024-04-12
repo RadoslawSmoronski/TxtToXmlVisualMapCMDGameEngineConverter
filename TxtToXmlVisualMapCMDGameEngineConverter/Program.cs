@@ -18,7 +18,10 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
             switch(args[0])
             {
                 case "convert":
-                    Console.WriteLine("test");
+                    if(args.Length > 1)
+                    {
+                        Convert(args[1]);
+                    }
                     break;
                 case "help":
                     Console.WriteLine(
@@ -31,17 +34,30 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
                         $"\n  Txt To Xml VisualMap CMDGameEngine Converter" +
                         $"\n  ver. {version}");
                     break;
+                default:
+                    Console.WriteLine("  Error: this command doesn't exist, check help.");
+                    break;
             }
 
         }
 
         static void Convert(string? filePath)
         {
-            string [] lines = GetLinesFromTxt(filePath);
-
-            List <VisualElement> visualElements = GetVisualElementsFromTxtLines(lines);
-
-            WriteXMLFile(visualElements);
+            try
+            {
+                string[] lines = GetLinesFromTxt(filePath);
+                List<VisualElement> visualElements = GetVisualElementsFromTxtLines(lines);
+                WriteXMLFile(visualElements);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+            finally
+            {
+                Console.WriteLine("\nConverted file was created succesfully!");
+            }
 
         }
 
@@ -106,7 +122,20 @@ namespace TxtToXmlVisualMapCMDGameEngineConverter
             }
 
 
-            string filePath = "file.xml";
+            string filePathName = "convertedTxt";
+            string filePath = "convertedTxt.xml";
+
+            int x = 2;
+
+            while(true)
+            {
+                if (File.Exists(filePath))
+                    filePath = filePathName + $"({x})" + ".xml";
+                else
+                    break;
+
+                x++;
+            }
 
             using (XmlWriter writer = XmlWriter.Create(filePath, new XmlWriterSettings { Indent = true }))
             {
